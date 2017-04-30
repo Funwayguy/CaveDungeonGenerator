@@ -95,7 +95,7 @@ public class SegmentMask
         {
             for(int j = y1; j <= y2; j++)
             {
-                map.SetSegment(i, j, state);
+                map.SetSegment(new MapPos(i, j), state);
             }
         }
     }

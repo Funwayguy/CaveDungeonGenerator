@@ -19,13 +19,18 @@
         return posY;
     }
 
-    public MapPos Offset(int x, int y)
+    public MapPos Offset(EnumDirection dir)
     {
-        return new MapPos(this.posX + x, this.posY + y);
+        return Offset(dir, 1);
     }
 
     public MapPos Offset(EnumDirection dir, int distance)
     {
-        return new MapPos(this.posX + (dir.OffsetX() * distance), this.posY + (dir.OffsetY() * distance));
+        return Offset(dir.OffsetX() * distance, dir.OffsetY() * distance);
+    }
+
+    public MapPos Offset(int x, int y)
+    {
+        return new MapPos(this.posX + x, this.posY + y);
     }
 }
