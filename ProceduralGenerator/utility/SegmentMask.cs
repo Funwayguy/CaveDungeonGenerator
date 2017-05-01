@@ -26,6 +26,16 @@ public class SegmentMask
         Setup();
     }
 
+    public int SegmentWidth()
+    {
+        return sizeX;
+    }
+
+    public int SegmentHeight()
+    {
+        return sizeY;
+    }
+
     public CellMap GetMask(int id)
     {
         if(id < 0 || id >= 16)

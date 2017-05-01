@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-
-public class MazeMap : IMap<int>
+﻿public class MazeMap : IMap<int>
 {
     private readonly int sizeX;
     private readonly int sizeY;
@@ -24,6 +21,14 @@ public class MazeMap : IMap<int>
     public int Height()
     {
         return sizeY;
+    }
+
+    public bool IsValid(MapPos pos)
+    {
+        int x = pos.PosX();
+        int y = pos.PosY();
+
+        return x >= 0 && x < sizeX && y >= 0 && y < sizeY;
     }
 
     public int GetSegment(MapPos pos)

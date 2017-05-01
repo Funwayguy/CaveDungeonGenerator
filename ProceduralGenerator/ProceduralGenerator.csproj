@@ -43,11 +43,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="generators\CellullarGenerator.cs" />
+    <Compile Include="generators\MazeGenerator.cs" />
     <Compile Include="storage\CellMap.cs" />
     <Compile Include="utility\EnumCellState.cs" />
     <Compile Include="utility\EnumDirection.cs" />
     <Compile Include="storage\IMap.cs" />
     <Compile Include="storage\MazeMap.cs" />
+    <Compile Include="utility\MapPos.cs" />
     <Compile Include="utility\MethodExtensions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -56,9 +59,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="generators\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

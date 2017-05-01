@@ -6,12 +6,12 @@ public static class MethodExtensions
     // DIRECTIONS
     public static int BitMask(this EnumDirection dir)
     {
-        return (int)(Math.Pow((int)dir, 2D));
+        return (int)(Math.Pow(2D, (int)dir));
     }
 
-    public static int Opposite(this EnumDirection dir)
+    public static EnumDirection Opposite(this EnumDirection dir)
     {
-        return (((int)dir << 2) & 15) + ((int) dir >> 2);
+        return (EnumDirection)(((int)dir + 2)%4);
     }
 
     public static int OffsetX(this EnumDirection dir)

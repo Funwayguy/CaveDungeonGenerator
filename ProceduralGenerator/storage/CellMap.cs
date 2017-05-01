@@ -1,6 +1,4 @@
-﻿using System;
-
-public class CellMap : IMap<EnumCellState>
+﻿public class CellMap : IMap<EnumCellState>
 {
     private int sizeX;
     private int sizeY;
@@ -23,6 +21,14 @@ public class CellMap : IMap<EnumCellState>
     public int Height()
     {
         return this.sizeY;
+    }
+
+    public bool IsValid(MapPos pos)
+    {
+        int x = pos.PosX();
+        int y = pos.PosY();
+
+        return x >= 0 && x < sizeX && y >= 0 && y < sizeY;
     }
 
     public EnumCellState GetSegment(MapPos pos)

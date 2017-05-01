@@ -4,15 +4,15 @@ using System;
 public class MazeGenerator
 {
     private Random rand;
-    private float strBias = 0F;
-    private float lpChance = 0F;
+    //private float strBias = 0F;
+    //private float lpChance = 0F;
 
     public MazeGenerator(Random rand)
     {
         this.rand = rand;
     }
 
-    public MazeGenerator SetStraightBias(float bias)
+    /*public MazeGenerator SetStraightBias(float bias)
     {
         this.strBias = bias;
         return this;
@@ -22,7 +22,7 @@ public class MazeGenerator
     {
         this.lpChance = chance;
         return this;
-    }
+    }*/
 
     public MazeMap Generate(int sizeX, int sizeY)
     {
@@ -35,40 +35,48 @@ public class MazeGenerator
 
         while(pending.Count > 0)
         {
-            int idx = rand.Next(pending.Count);
-            MapPos curPos = pending[idx];
+            MapPos curPos = pending[0];
             int curSeg = map.GetSegment(curPos);
-            List<EnumDirection> dirs = GetEmptySides(map, curPos, lastDir.Value);
+            List<EnumDirection> dirs = GetEmptySides(map, curPos, lastDir);
 
             if(lastDir.HasValue)
             {
-                curSeg |= lastDir.Value.Opposite();
+                curSeg |= lastDir.Value.Opposite().BitMask();
                 map.SetSegment(curPos, curSeg);
             }
 
             if(dirs.Count <= 0)
             {
                 lastDir = null;
-                pending.RemoveAt(idx);
-                continue;
+                pending.RemoveAt(0);
+                pending.Shuffle(rand);
             } else
             {
                 EnumDirection nxtDir = dirs[rand.Next(dirs.Count)];
                 curSeg |= nxtDir.BitMask();
                 map.SetSegment(curPos, curSeg);
+                lastDir = nxtDir;
+
+                if(dirs.Count == 1)
+                {
+                    pending.RemoveAt(0);
+                }
+
+                pending.Insert(0, curPos.Offset(nxtDir));
             }
         }
 
         return map;
     }
 
-    public List<EnumDirection> GetEmptySides(MazeMap map, MapPos pos, EnumDirection lastDir)
+    public List<EnumDirection> GetEmptySides(MazeMap map, MapPos pos, EnumDirection? lastDir)
     {
         List<EnumDirection> list = new List<EnumDirection>();
 
         foreach(EnumDirection d in MethodExtensions.AllDirections())
         {
-            if(map.GetSegment(pos.Offset(d)) <= 0)
+            MapPos off = pos.Offset(d);
+            if(map.IsValid(off) && map.GetSegment(off) <= 0)
             {
                 list.Add(d);
             }

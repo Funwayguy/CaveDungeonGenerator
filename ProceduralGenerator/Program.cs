@@ -6,22 +6,16 @@ public class Program
     {
         Console.SetWindowSize(160, 80);
 
+        Random rand = new Random();
         SegmentMask maskSet = new SegmentMask(10, 10);
+        MazeMap mazeMap = new MazeGenerator(rand).Generate(8,8);
+        CellMap cellMap = new CellularGenerator(rand).Generate(mazeMap, maskSet);
 
-        for(int n = 0; n < 16; n++)
+        for(int j = 0; j < cellMap.Height(); j++)
         {
-            Console.WriteLine("ID: " + n);
-            CellMap map = maskSet.GetMask(n);
-
-            for(int j = 0; j < 10; j++)
+            for(int i = 0; i < cellMap.Width(); i++)
             {
-                for(int i = 0; i < 10; i++)
-                {
-                    Console.Write(GetCharFromCell(map.GetSegment(i, j)) + " ");
-                }
-
-                Console.WriteLine();
-                Console.WriteLine();
+                Console.Write(GetCharFromCell(cellMap.GetSegment(new MapPos(i, j))) + " ");
             }
         }
     }
@@ -31,11 +25,11 @@ public class Program
         switch(state)
         {
             case EnumCellState.OPEN:
-                return ".";
+                return " ";
             case EnumCellState.CLOSED:
-                return "X";
-            case EnumCellState.LOCK_OPEN:
                 return "*";
+            case EnumCellState.LOCK_OPEN:
+                return ".";
             case EnumCellState.LOCK_CLOSED:
                 return "#";
         }
