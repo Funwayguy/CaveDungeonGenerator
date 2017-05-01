@@ -8,8 +8,16 @@ public class Program
 
         Random rand = new Random();
         SegmentMask maskSet = new SegmentMask(10, 10);
-        MazeMap mazeMap = new MazeGenerator(rand).Generate(8,8);
-        CellMap cellMap = new CellularGenerator(rand).Generate(mazeMap, maskSet);
+
+        MazeGenerator mazeGen = new MazeGenerator(rand);
+        mazeGen.SetLoopChance(0.1F);
+        MazeMap mazeMap = mazeGen.Generate(8,8);
+
+        CellularGenerator cellGen = new CellularGenerator(rand);
+        cellGen.SetPasses(12);
+        cellGen.SetFillWeight(0.3F);
+        cellGen.SetThresholds(4,4);
+        CellMap cellMap = cellGen.Generate(mazeMap, maskSet);
 
         for(int j = 0; j < cellMap.Height(); j++)
         {
@@ -27,9 +35,9 @@ public class Program
             case EnumCellState.OPEN:
                 return " ";
             case EnumCellState.CLOSED:
-                return "*";
+                return "#";
             case EnumCellState.LOCK_OPEN:
-                return ".";
+                return " ";
             case EnumCellState.LOCK_CLOSED:
                 return "#";
         }

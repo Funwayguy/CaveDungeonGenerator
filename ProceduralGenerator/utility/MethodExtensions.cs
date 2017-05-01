@@ -51,6 +51,11 @@ public static class MethodExtensions
         return state == EnumCellState.LOCK_OPEN || state == EnumCellState.LOCK_CLOSED;
     }
 
+    public static bool SimpleState(this EnumCellState state)
+    {
+        return state == EnumCellState.OPEN || state == EnumCellState.LOCK_OPEN;
+    }
+
     // LISTS
     public static void Shuffle<T>(this List<T> list, Random rand)
     {

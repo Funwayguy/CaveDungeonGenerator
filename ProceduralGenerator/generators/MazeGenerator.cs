@@ -5,7 +5,7 @@ public class MazeGenerator
 {
     private Random rand;
     //private float strBias = 0F;
-    //private float lpChance = 0F;
+    private float lpChance = 0F;
 
     public MazeGenerator(Random rand)
     {
@@ -16,13 +16,13 @@ public class MazeGenerator
     {
         this.strBias = bias;
         return this;
-    }
+    }*/
     
     public MazeGenerator SetLoopChance(float chance)
     {
         this.lpChance = chance;
         return this;
-    }*/
+    }
 
     public MazeMap Generate(int sizeX, int sizeY)
     {
@@ -72,11 +72,16 @@ public class MazeGenerator
     public List<EnumDirection> GetEmptySides(MazeMap map, MapPos pos, EnumDirection? lastDir)
     {
         List<EnumDirection> list = new List<EnumDirection>();
+        int curMask = map.GetSegment(pos);
 
         foreach(EnumDirection d in MethodExtensions.AllDirections())
         {
             MapPos off = pos.Offset(d);
-            if(map.IsValid(off) && map.GetSegment(off) <= 0)
+
+            if((curMask & d.BitMask()) != 0)
+            {
+                continue;
+            } else if(map.IsValid(off) && (map.GetSegment(off) <= 0 || rand.NextDouble() < lpChance))
             {
                 list.Add(d);
             }
