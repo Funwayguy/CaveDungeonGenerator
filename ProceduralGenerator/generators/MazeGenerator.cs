@@ -4,7 +4,7 @@ using System;
 public class MazeGenerator
 {
     private Random rand;
-    //private float strBias = 0F;
+    private float strBias = 0F;
     private float lpChance = 0F;
 
     public MazeGenerator(Random rand)
@@ -12,11 +12,11 @@ public class MazeGenerator
         this.rand = rand;
     }
 
-    /*public MazeGenerator SetStraightBias(float bias)
+    public MazeGenerator SetStraightBias(float bias)
     {
         this.strBias = bias;
         return this;
-    }*/
+    }
     
     public MazeGenerator SetLoopChance(float chance)
     {
@@ -84,6 +84,14 @@ public class MazeGenerator
             } else if(map.IsValid(off) && (map.GetSegment(off) <= 0 || rand.NextDouble() < lpChance))
             {
                 list.Add(d);
+            }
+        }
+
+        if(lastDir.HasValue && rand.NextDouble() < strBias && list.Contains(lastDir.Value))
+        {
+            for(int n = list.Count - 1; n >= 0; n--)
+            {
+                list[n] = lastDir.Value;
             }
         }
 
