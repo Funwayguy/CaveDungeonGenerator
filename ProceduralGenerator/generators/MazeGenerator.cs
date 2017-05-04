@@ -74,18 +74,22 @@ public class MazeGenerator
         List<EnumDirection> list = new List<EnumDirection>();
         int curMask = map.GetSegment(pos);
 
-        foreach(EnumDirection d in MethodExtensions.AllDirections())
+        Predicate<EnumDirection> dirPre = delegate(EnumDirection d)
         {
             MapPos off = pos.Offset(d);
 
             if((curMask & d.BitMask()) != 0)
             {
-                continue;
+                return false;
             } else if(map.IsValid(off) && (map.GetSegment(off) <= 0 || rand.NextDouble() < lpChance))
             {
-                list.Add(d);
+                return true;
             }
-        }
+
+            return false;
+        };
+
+        list.AddAll(MethodExtensions.AllDirections(), dirPre);
 
         if(lastDir.HasValue && rand.NextDouble() < strBias && list.Contains(lastDir.Value))
         {

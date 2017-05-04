@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Linq;
 using System;
 
 public class CellularGenerator
@@ -52,26 +54,20 @@ public class CellularGenerator
 
     private void DoPass(CellMap map)
     {
-        for(int i = 0; i < map.Width(); i++)
+        List<KeyValuePair<MapPos, EnumCellState>> baseList = new List<KeyValuePair<MapPos, EnumCellState>>();
+        (from e in MethodExtensions.MapToKeyPairs(map) where map.IsValid(e.Key) && !e.Value.IsLocked() select e).ToList().ForEach(x => baseList.Add(x));
+
+        foreach(KeyValuePair<MapPos, EnumCellState> pair in baseList)
         {
-            for(int j = 0; j < map.Height(); j++)
+            MapPos p1 = pair.Key;
+            int neighbours = GetNeighbours(map, p1);
+
+            if(neighbours < minCells)
             {
-                MapPos p1 = new MapPos(i, j);
-
-                if(!map.IsValid(p1) || map.GetSegment(p1).IsLocked())
-                {
-                    continue;
-                }
-
-                int neighbours = GetNeighbours(map, p1);
-
-                if(neighbours < minCells)
-                {
-                    map.SetSegment(p1, EnumCellState.OPEN);
-                } else if(neighbours > maxCells)
-                {
-                    map.SetSegment(p1, EnumCellState.CLOSED);
-                }
+                map.SetSegment(p1, EnumCellState.OPEN);
+            } else if(neighbours > maxCells)
+            {
+                map.SetSegment(p1, EnumCellState.CLOSED);
             }
         }
     }

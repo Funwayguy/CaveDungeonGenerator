@@ -3,6 +3,22 @@ using System.Collections.Generic;
 
 public static class MethodExtensions
 {
+    public static IEnumerable<KeyValuePair<MapPos, T>> MapToKeyPairs<T>(IMap<T> map)
+    {
+        Dictionary<MapPos, T> dict = new Dictionary<MapPos, T>();
+
+        for(int i = 0; i < map.Width(); i++)
+        {
+            for(int j = 0; j < map.Height(); j++)
+            {
+                MapPos p = new MapPos(i, j);
+                dict.Add(p, map.GetSegment(p));
+            }
+        }
+
+        return dict;
+    }
+
     // DIRECTIONS
     public static int BitMask(this EnumDirection dir)
     {
@@ -66,6 +82,17 @@ public static class MethodExtensions
             T a = list[n];
             list[n] = list[i];
             list[i] = a;
+        }
+    }
+
+    public static void AddAll<T>(this List<T> list, IEnumerable<T> e, Predicate<T> p)
+    {
+        foreach(T v in e)
+        {
+            if(p.Invoke(v))
+            {
+                list.Add(v);
+            }
         }
     }
 
